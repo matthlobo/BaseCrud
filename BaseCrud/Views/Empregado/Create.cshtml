@@ -1,0 +1,51 @@
+﻿@model Empregado
+
+<div class="container shadow p-5">
+    <div class="row pb-2">
+        <h2>Add Empregado</h2>
+    </div>
+
+    <form method="post">
+        <div asp-validation-summary="All"></div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Nome">Nome do Empregado</label>
+                <input type="text" class="form-control mb-3" asp-for="Nome" placeholder="Digite seu nome">
+                <span asp-validation-for="Nome" class=" alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Designacao">Designação</label>
+                <input type="text" class="form-control mb-3" asp-for="Designacao" placeholder="Digite a designação">
+                <span asp-validation-for="Designacao" class=" alert-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Endereco">Endereço</label>
+                <input type="text" class="form-control mb-3" asp-for="Endereco" placeholder="Digite o endereço">
+                <span asp-validation-for="Endereco" class=" alert-danger"></span>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <label asp-for="EmpregadoEm">Empregado Em</label>
+                <input type="datetime-local" class="form-control" asp-for="EmpregadoEm">
+                <span asp-validation-for="EmpregadoEm" class=" alert-danger"></span>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-lg btn-primary p-2"><i class="bi bi-file-plus-fill"></i>Salvar</button>
+        <a asp-controller="Empregado" asp-action="Index" class="btn btn-lg btn-warning p-2">Voltar a Lista</a>
+    </form>
+
+</div>
+
+
+@*//for front end validations*@
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+}
