@@ -1,4 +1,9 @@
 using BaseCrud.Data;
+using BaseCrud.Data.Interfaces;
+using BaseCrud.Repositories;
+using BaseCrud.Repositories.Interfaces;
+using BaseCrud.Services;
+using BaseCrud.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +15,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+
+// Repository
+builder.Services.AddTransient<IEmpregadoRepository, EmpregadoRepository>();
+// Service
+builder.Services.AddTransient<IEmpregadoService, EmpregadoService>();
+// DbContext
+builder.Services.AddTransient<IAppDbContext, AppDbContext>();
 
 var app = builder.Build();
 

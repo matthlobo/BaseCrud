@@ -1,19 +1,20 @@
 ﻿using BaseCrud.Data;
 using BaseCrud.Models;
+using BaseCrud.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BaseCrud.Controllers
 {
     public class EmpregadoController : Controller
     {
-        private readonly AppDbContext _context;
-        public EmpregadoController(AppDbContext context)
+        private readonly IEmpregadoService _service;
+        public EmpregadoController(IEmpregadoService service)
         {
-            _context = context;
+            _service = service;
         }
         public IActionResult Index()
         {
-            IEnumerable<Empregado> listaDeEmpregados = _context.Empregados;
+            var listaDeEmpregados = _service.GetAll();
             return View(listaDeEmpregados);
         }
 
@@ -28,8 +29,7 @@ namespace BaseCrud.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Empregados.Add(empregado);
-                _context.SaveChanges();
+                _service.Add(empregado);
                 TempData["ResultOk"] = "Empregado Registrado com Sucesso!";
                 return RedirectToAction("Index");
             }
@@ -37,13 +37,13 @@ namespace BaseCrud.Controllers
             return View(empregado);
         }
 
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null || id == 0)
+            if (id == 0)
             {
                 return NotFound();
             }
-            var empregadoEncontrado = _context.Empregados.Find(id);
+            var empregadoEncontrado = _service.GetById(id);
 
             if (empregadoEncontrado == null)
             {
@@ -59,8 +59,7 @@ namespace BaseCrud.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Empregados.Update(empregado);
-                _context.SaveChanges();
+                _service.Edit(empregado);
                 TempData["ResultOk"] = "Empregado editado com sucesso!";
                 return RedirectToAction("Index");
             }
@@ -68,13 +67,13 @@ namespace BaseCrud.Controllers
             return View(empregado);
         }
 
-        public IActionResult Delete(int? id)
+        public IActionResult Delete(int id)
         {
-            if (id == null || id == 0)
+            if (id == 0)
             {
                 return NotFound();
             }
-            var empregadoEncontrado = _context.Empregados.Find(id);
+            var empregadoEncontrado = _service.GetById(id);
 
             if (empregadoEncontrado == null)
             {
@@ -85,15 +84,14 @@ namespace BaseCrud.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteEmp(int? id)
+        public IActionResult DeleteEmp(int id)
         {
-            var deletarEmpregado = _context.Empregados.Find(id);
+            var deletarEmpregado = _service.GetById(id);
             if (deletarEmpregado == null)
             {
                 return NotFound();
             }
-            _context.Empregados.Remove(deletarEmpregado);
-            _context.SaveChanges();
+            _service.Delete(id);
             TempData["ResultOk"] = "Empregado removido com sucesso!";
             return RedirectToAction("Index");
         }
